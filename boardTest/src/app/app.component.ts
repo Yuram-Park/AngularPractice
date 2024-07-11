@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { BoardListComponent } from './board-list/board-list.component';
+import { BoardListComponent } from './shared/component/board-list/board-list.component';
 
 @Component({
   selector: 'app-root',

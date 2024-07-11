@@ -1,0 +1,19 @@
+<button (click)="show()">click</button>
+<table>
+  <thead>
+  <tr>
+    <th>breed_id</th>
+    <th>breed_name</th>
+    <th>breed_name_ko</th>
+  </tr>
+  </thead>
+  <tbody>
+  @for (list of postList; track $index) {
+    <tr>
+      <th>{{list.breed_id}}</th>
+      <th>{{list.breed_name}}</th>
+      <th>{{list.breed_name_ko}}</th>
+    </tr>
+  }
+  </tbody>
+</table>
