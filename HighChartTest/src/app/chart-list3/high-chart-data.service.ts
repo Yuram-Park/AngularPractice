@@ -12,13 +12,49 @@ export class HighChartDataService {
   }
 
   private process: {[chart: string]: (processedData: any) => Object} = {
-    'line': (processedData) => {
+    'treemap': (processedData) => {
       const series: any[] = [];
 
       series.push({
-        type: 'line',
-        data: processedData.data
-      })
+        title: {
+          text: processedData.title
+        },
+        subtitle: {
+          text: processedData.subtitle
+        }
+      }
+      ,{
+        name: processedData.name,
+        type: 'treemap',
+        layoutAlgorithm: 'squarified',
+        allowDrillToNode: true,
+        animationLimit: 1000,
+        dataLabels: {
+          enabled: false,
+        },
+        levels: [
+          {
+            level: 1,
+            dataLabels: {
+              enabled: true,
+            },
+            borderWidth: 3,
+            levelIsConstant: false,
+          },
+          {
+            level: 1,
+            dataLabels: {
+              style: {
+                fontSize: '14px',
+              },
+            },
+          },
+        ],
+        accessibility: {
+          exposeAsGroupOnly: true,
+        },
+        data: processedData.data,
+      });
 
       return {
         series: series
