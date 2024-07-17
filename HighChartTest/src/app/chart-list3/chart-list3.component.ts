@@ -1,7 +1,23 @@
 import { Component } from '@angular/core';
-import * as Highcharts from 'highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { HighChart3Service } from './high-chart3.service';
+import * as Highcharts from 'highcharts';
+import TreemapModule from 'highcharts/modules/treemap';
+import Accessibility from 'highcharts/modules/accessibility';
+import HighchartsMore from 'highcharts/highcharts-more';
+import Exporting from 'highcharts/modules/exporting';
+import Map from 'highcharts/modules/map';
+import SeriesOnPoint from 'highcharts/modules/series-on-point';
+import Networkgraph from 'highcharts/modules/networkgraph';
+import Wordcloud from 'highcharts/modules/wordcloud';
+// Accessibility(Highcharts);
+// HighchartsMore(Highcharts);
+// Exporting(Highcharts);
+// Map(Highcharts);
+// SeriesOnPoint(Highcharts);
+// Networkgraph(Highcharts);
+// Wordcloud(Highcharts);
+// TreemapModule(Highcharts);
 
 @Component({
   selector: 'chart-list3',
@@ -11,148 +27,67 @@ import { HighChart3Service } from './high-chart3.service';
   styleUrl: './chart-list3.component.css',
 })
 export class ChartList3Component {
-  //constructor(private highChart3Service: HighChart3Service) {}
-
   Highcharts: typeof Highcharts = Highcharts;
+  isHighcharts: boolean = typeof this.Highcharts === 'object';
+  constructor() {}
+
+
 
   chartData: any;
   chartOptions: Highcharts.Options = {
-    title: {
-      text: '과학기술표준 연구분야 분류1',
-    },
-    subtitle: {
-      text: '과학기술표준 연구분야 분류1',
+    colorAxis: {
+      minColor: '#FFFFFF',
+      maxColor: '#0000ff',
     },
     series: [
       {
-        name: '과학기술표준 연구분야 분류1',
         type: 'treemap',
-        dataLabels: {
-          enabled: false,
-        },
-
-        accessibility: {
-          exposeAsGroupOnly: true,
-        },
+        layoutAlgorithm: 'squarified',
+        clip: false,
         data: [
           {
-            id: 'Central',
-            name: 'Central',
-            value: 378148,
-            color: '#f2f8fd',
+            name: 'A',
+            value: 6,
+            colorValue: 1,
           },
           {
-            id: 'Naitasiri',
-            name: 'Naitasiri',
-            value: 177678,
-            parent: 'Central',
+            name: 'B',
+            value: 6,
+            colorValue: 2,
           },
           {
-            id: 'Namosi',
-            name: 'Namosi',
-            value: 7871,
-            parent: 'Central',
+            name: 'C',
+            value: 4,
+            colorValue: 3,
           },
           {
-            id: 'Rewa',
-            name: 'Rewa',
-            value: 108016,
-            parent: 'Central',
+            name: 'D',
+            value: 3,
+            colorValue: 4,
           },
           {
-            id: 'Serua',
-            name: 'Serua',
-            value: 20031,
-            parent: 'Central',
+            name: 'E',
+            value: 2,
+            colorValue: 5,
           },
           {
-            id: 'Tailevu',
-            name: 'Tailevu',
-            value: 64552,
-            parent: 'Central',
+            name: 'F',
+            value: 2,
+            colorValue: 6,
           },
           {
-            id: 'Western',
-            name: 'Western',
-            value: 337071,
-            color: '#d0e5f9',
-          },
-          {
-            id: 'Ba',
-            name: 'Ba',
-            value: 247708,
-            parent: 'Western',
-          },
-          {
-            id: 'Nadroga-Navosa',
-            name: 'Nadroga-Navosa',
-            value: 58931,
-            parent: 'Western',
-          },
-          {
-            id: 'Ra',
-            name: 'Ra',
-            value: 30432,
-            parent: 'Western',
-          },
-          {
-            id: 'Northern',
-            name: 'Northern',
-            value: 131918,
-            color: '#2183e3',
-          },
-          {
-            id: 'Bua',
-            name: 'Bua',
-            value: 15466,
-            parent: 'Northern',
-          },
-          {
-            id: 'Cakaudrove',
-            name: 'Cakaudrove',
-            value: 50469,
-            parent: 'Northern',
-          },
-          {
-            id: 'Macuata',
-            name: 'Macuata',
-            value: 65983,
-            parent: 'Northern',
-          },
-          {
-            id: 'Eastern',
-            name: 'Eastern',
-            value: 36156,
-            color: '#145ca2',
-          },
-          {
-            id: 'Kadavu',
-            name: 'Kadavu',
-            value: 10897,
-            parent: 'Eastern',
-          },
-          {
-            id: 'Lau',
-            name: 'Lau',
-            value: 9602,
-            parent: 'Eastern',
-          },
-          {
-            id: 'Lomaiviti',
-            name: 'Lomaiviti',
-            value: 15657,
-            parent: 'Eastern',
-          },
-          {
-            id: 'Rotuma',
-            name: 'Rotuma',
-            value: 1594,
-            color: '#092a4b',
+            name: 'G',
+            value: 1,
+            colorValue: 7,
           },
         ],
       },
     ],
-  };
+    title: {
+      text: 'Highcharts Treemap',
+    },
+  }
+};
 
   // processedData = {
   //   title: '과학기술표준 연구분야 분류1',
@@ -214,4 +149,4 @@ export class ChartList3Component {
   //   );
   //   console.log(this.chartOptions)
   // }
-}
+// }
