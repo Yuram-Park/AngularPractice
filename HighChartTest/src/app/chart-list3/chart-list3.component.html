@@ -1,7 +1,8 @@
 <p>chart-list3 works!</p>
-<highcharts-chart
-  [Highcharts]="Highcharts"
-  [constructorType]="'mapChart'"
-  [options]="chartOptions"
-  style="width: 50%; height: 400px; display: block;"
-></highcharts-chart>
+<div *ngIf="chartOptions">
+  <highcharts-chart
+    [Highcharts]="Highcharts"
+    [options]="chartOptions"
+    style="width: 50%; height: 400px; display: block;"
+  ></highcharts-chart>
+</div>

@@ -18,11 +18,6 @@ export class HighChartService {
     subtitle: {
       text: '연구수행주체',
     },
-    // 차트 유형
-    chart: {
-      type: 'pie',
-    },
-
     plotOptions: {
       pie: {
         allowPointSelect: true,
@@ -33,6 +28,7 @@ export class HighChartService {
     },
     series: [
       {
+        // 차트 유형
         type: 'pie',
         innerSize: '50%',
         // 계열명?

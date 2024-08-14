@@ -1,12 +1,16 @@
 import { Component } from '@angular/core';
-import Highcharts from 'highcharts';
+// import Highcharts from 'highcharts';
 // import Dashboards from '@highcharts/dashboards';
 // import DataGrid from '@highcharts/dashboards/datagrid';
+// import LayoutModule from '@highcharts/dashboards/modules/layout';
+
+// LayoutModule(Dashboards);
 
 // Dashboards.HighchartsPlugin.custom.connectHighcharts(Highcharts);
 // Dashboards.DataGridPlugin.custom.connectDataGrid(DataGrid);
 // Dashboards.PluginHandler.addPlugin(Dashboards.HighchartsPlugin);
 // Dashboards.PluginHandler.addPlugin(Dashboards.DataGridPlugin);
+
 
 @Component({
   selector: 'chart-list4',
@@ -16,7 +20,7 @@ import Highcharts from 'highcharts';
   styleUrl: './chart-list4.component.css',
 })
 export class ChartList4Component {
-  Highcharts: typeof Highcharts = Highcharts;
+  // Highcharts: typeof Highcharts = Highcharts;
 
   chartOptions: Highcharts.Options = {
 

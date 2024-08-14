@@ -1,0 +1,51 @@
+<p>analysis-option works!</p>
+
+<div>
+  <h4>차트 유형</h4>
+  <input [(ngModel)]="chartType" type="radio" id="column" value="column" name="chartType"/><label for="column">수직 막대 차트</label>
+  <input [(ngModel)]="chartType" type="radio" id="line" value="line" name="chartType"/><label for="line">선 차트</label>
+</div>
+
+<div>
+  <h4>분석 변수 1(x축)</h4>
+  <select [(ngModel)]="xValue" id="hi">
+    <option value="company">과제수행기관명</option>
+  </select><br/>
+  TOP K <input [(ngModel)]="xValueTop" type="radio" id="10" value="10" name="xValueTop"/><label for="10">10</label>
+</div>
+
+<div>
+  <h4>분석 변수 2(y축)</h4>
+  <select [(ngModel)]="yValue" id="hi">
+    <option value="taskNum" selected>과제 건수(건)</option>
+  </select><br/>
+  TOP K <input type="radio" id="10" value="10"/><label for="10">10</label>
+</div>
+
+<div>
+  <h4>분석 값 1(y축 좌)</h4>
+  <select [(ngModel)]="yLeft" id="hi">
+    <option value="taskNum">과제 건수(건)</option>
+  </select><br/>
+  <input [(ngModel)]="yLeftValue" type="radio" id="num" value="num" name="yLeftValue"/><label for="num">개수</label>
+  <input [(ngModel)]="yLeftValue" type="radio" id="sum" value="sum" name="yLeftValue"/><label for="sum">합계</label>
+  <input [(ngModel)]="yLeftValue" type="radio" id="avg" value="avg" name="yLeftValue"/><label for="avg">평균</label>
+  <br/>
+  <input [(ngModel)]="yLeftType" type="radio" id="column" value="column" name="yLeftType"/><label for="column">막대</label>
+  <input [(ngModel)]="yLeftType" type="radio" id="line" value="line" name="yLeftType"/><label for="line">선</label>
+</div>
+
+<div>
+  <h4>분석 값 2(y축 우)</h4>
+  <select [(ngModel)]="yRight" id="hi">
+    <option value="journalNum">논문 건수</option>
+  </select><br/>
+  <input [(ngModel)]="yRightValue" type="radio" id="num" value="num" name="yRightValue"/><label for="num">개수</label>
+  <input [(ngModel)]="yRightValue" type="radio" id="sum" value="sum" name="yRightValue"/><label for="sum">합계</label>
+  <input [(ngModel)]="yRightValue" type="radio" id="avg" value="avg" name="yRightValue"/><label for="avg">평균</label>
+  <br/>
+  <input [(ngModel)]="yRightType" type="radio" id="column" value="column" name="yRightType"/><label for="column">막대</label>
+  <input [(ngModel)]="yRightType" type="radio" id="line" value="line" name="yRightType"/><label for="line">선</label>
+</div>
+<br/>
+<button (click)="setChartOption()">Chart</button>

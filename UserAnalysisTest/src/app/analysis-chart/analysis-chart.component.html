@@ -1,0 +1,9 @@
+<p>analysis-chart works!</p>
+<analysis-option (goChart)="setChartOptions($event)"></analysis-option>
+<hr/>
+<highcharts-chart
+  [Highcharts]="Highcharts"
+  [options]="chartOptions"
+  [(update)]="updateFlag"
+  style="width: 50%; height: 400px; display: block;"
+></highcharts-chart>
