@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ChartOptionInputService } from '../analysis-chart/chart-option-input.service';
 
 export interface inputOptions {
     chartType: string,
@@ -22,6 +23,16 @@ export interface inputOptions {
   styleUrl: './analysis-option.component.css',
 })
 export class AnalysisOptionComponent {
+
+  // constructor(private chartOptionInput: ChartOptionInputService){}
+  // chartData: any = {};
+
+  // ngOnInit(){
+  //   let option: any = this.chartOptionInput.setOption['column'](this.chartData);
+  //   console.log(option);
+  // }
+
+
   @Output() goChart = new EventEmitter<inputOptions>();
 
   chartType: string = '';
@@ -51,4 +62,6 @@ export class AnalysisOptionComponent {
     };
     this.goChart.emit(options);
   }
+
+
 }
