@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { chart } from 'highcharts';
 
-
 export interface data {
   chartType: string;
   titleText: string;
@@ -15,6 +14,9 @@ export interface data {
   value2Type: string | null;
   value2Data: any[] | null;
   value2Tooltip: string | null;
+
+  // treemap
+  treemapValue: any[];
 }
 
 @Injectable({
@@ -41,6 +43,9 @@ export class ChartOptionInputService {
       value2Type: userOption.value2Type,
       value2Data: respData.value2Data,
       value2Tooltip: ' 건',
+
+      // treemap
+      treemapValue: respData.treemapValue,
     };
 
     return chartData;
@@ -129,13 +134,14 @@ export class ChartOptionInputService {
     // 차트 유형: 선 차트
     line: (chartData) => {
       return {
+        // 분석 제목
         title: {
           text: chartData.titleText,
           align: 'left',
         },
         // 기존 분석 제목
         subtitle: {
-          text: '기준연도(금액)',
+          text: chartData.titleText,
           align: 'left',
         },
         xAxis: {
@@ -143,7 +149,7 @@ export class ChartOptionInputService {
           categories: chartData.xData,
           accessibility: {
             // x축 타이틀
-            description: '기준연도(금액)',
+            description: chartData.titleText,
           },
         },
         yAxis: [
@@ -189,14 +195,25 @@ export class ChartOptionInputService {
     },
     // 차트 유형: 원형 차트
     pie: (chartData) => {
-      return {
+
+      let dataset: any[] = [];
+      for (let i = 0; i < chartData.value1Data.length; i++) {
+        dataset.push({
+          // x축 좌표(변수)
+          name: chartData.xData[i],
+          // 값
+          y: chartData.value1Data[i],
+        });
+      }
+
+      let options = {
         // 분석 제목
         title: {
           text: chartData.titleText,
         },
         // 기존 분석 제목? = x축 타이틀?
         subtitle: {
-          text: '연구수행주체',
+          text: chartData.titleText,
         },
         plotOptions: {
           pie: {
@@ -209,51 +226,18 @@ export class ChartOptionInputService {
         series: [
           {
             // 차트 유형
-            type: 'pie',
+            type: chartData.value1Type,
             innerSize: '50%',
             // 계열명?
-            name: '정부투자연구비(백만원)',
+            name: chartData.value1,
             // 값 레이블 = x축 레이블
             dataLabels: [
               {
                 enabled: true,
-                format: '{point.name} {point.y} %',
+                format: '{point.name} {point.y} %', // 설정필요//
               },
             ],
-            data: [
-              {
-                // x축 좌표(변수)
-                name: '출연연구소',
-                // 값
-                y: 48.18,
-              },
-              {
-                // x축 좌표(변수)
-                name: '대학',
-                sliced: true,
-                selected: true,
-                // 값
-                y: 45.07,
-              },
-              {
-                // x축 좌표(변수)
-                name: '대기업',
-                // 값
-                y: 2.88,
-              },
-              {
-                // x축 좌표(변수)
-                name: '중소기업',
-                // 값
-                y: 2.81,
-              },
-              {
-                // x축 좌표(변수)
-                name: '기타',
-                // 값
-                y: 1.06,
-              },
-            ],
+            data: dataset,
           },
         ],
         // tooltip?(계열명+x축좌표+값+valueSuffix)
@@ -261,68 +245,71 @@ export class ChartOptionInputService {
           valueSuffix: '%',
         },
       };
+
+      return options;
     },
     // 차트 유형: 트리맵(타일) 차트
     treemap: (chartData) => {
-      return {
+
+      let dataset: any[] = [];
+      for(let i=0; i<chartData.treemapValue.length; i++){
+        if(chartData.treemapValue[i].parent === null || chartData.treemapValue[i].parent === undefined){
+          dataset.push({
+            id: chartData.treemapValue[i].name,
+            // x축 좌표(변수) = x축 레이블?
+            name: chartData.treemapValue[i].name,
+            // 값
+            value: chartData.treemapValue[i].value,
+          });
+        } else{
+          dataset.push(chartData.treemapValue[i]);
+        }
+
+      }
+
+      let options = {
         // 분석 제목
         title: {
           text: chartData.titleText,
-          align: 'left',
         },
-        // 기존 분석 제목
+        // 기존 분석 제목?
         subtitle: {
-          text: '기준연도(금액)',
-          align: 'left',
+          text: chartData.titleText,
         },
-        xAxis: {
-          // x축 좌표(변수) / x축 레이블
-          categories: chartData.xData,
-          accessibility: {
-            // x축 타이틀
-            description: '기준연도(금액)',
-          },
-        },
-        yAxis: [
-          {
-            // y축 좌표(변수) / y축 레이블
-            min: 1,
-            // y축 타이틀
-            title: {
-              text: '연구개발비(백만원)',
-            },
-          },
-        ],
         series: [
           {
-            // y축 #1
-            // 계열명?
+            // x축 타이틀?(대분류)
             name: chartData.value1Name,
             // 차트 유형
             type: chartData.value1Type,
-            yAxis: 0,
-            // 값
-            data: chartData.value1Data,
-            // 값 레이블
-            dataLabels: [
+            layoutAlgorithm: 'squarified',
+            allowTraversingTree: true,
+            animationLimit: 1000,
+            dataLabels: {
+              enabled: true,
+            },
+            levels: [
               {
-                align: 'center',
-                enabled: true,
+                level: 1,
+                borderWidth: 3,
+              },
+              {
+                level: 2,
               },
             ],
-            // tooltip?(계열명 + x축 좌표(변수) + 값 + valueSuffix)
-            tooltip: {
-              valueSuffix: chartData.value1Tooltip,
+            accessibility: {
+              exposeAsGroupOnly: true,
             },
+            data: dataset,
           },
         ],
-        plotOptions: {
-          column: {
-            pointPadding: 0.2,
-            borderWidth: 0,
-          },
+        // tooltip?(x축좌표+값+valueSuffix)
+        tooltip: {
+          valueSuffix: '백만원',
         },
       };
+
+      return options;
     },
   };
 }
