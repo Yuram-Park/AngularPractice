@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { chart } from 'highcharts';
 
 export interface data {
@@ -58,42 +59,53 @@ export class ChartOptionInputService {
     column: (chartData) => {
       return {
         title: {
+          // 분석 제목
           text: chartData.titleText,
-          align: 'left',
+          align: 'center',
         },
         subtitle: {
+          // 분석 소제목?
           text: chartData.titleText,
-          align: 'left',
+          align: 'center',
         },
         xAxis: {
+          // x축 좌표(변수), x축 레이블 - 배열타입
           categories: chartData.xData,
-          accessibility: {
-            description: chartData.titleText,
+          title: {
+            // x축 타이틀
+            text: chartData.titleText,
           },
         },
         yAxis: [
           {
             // y축 #1
-            min: 1,
+            // y축 최솟값?
+            //min: 1,
             title: {
+              // y축 타이틀 #1
               text: chartData.value1Name,
             },
           },
           {
             // y축 #2
-            min: 1,
+            // y축 최솟값?
+            //min: 1,
             title: {
+              // y축 타이틀 #2
               text: chartData.value2Name,
             },
-            opposite: true,
+            opposite: true, // y축 위치
           },
         ],
         series: [
           {
             // y축 #1
+            // y축 계열명
             name: chartData.value1Name,
+            // 차트 유형
             type: chartData.value1Type,
-            yAxis: 0,
+            yAxis: 0, // 위 yAxis의 첫번째 값
+            // 값 #1
             data: chartData.value1Data,
             dataLabels: [
               {
@@ -102,14 +114,18 @@ export class ChartOptionInputService {
               },
             ],
             tooltip: {
+              // tooltip
               valueSuffix: chartData.value1Tooltip,
             },
           },
           {
             // y축 #2
+            // y축 계열명
             name: chartData.value2Name,
+            // 차트 유형
             type: chartData.value2Type,
-            yAxis: 1,
+            yAxis: 1, // 위 yAxis의 첫번째 값
+            // 값 #2
             data: chartData.value2Data,
             dataLabels: [
               {
@@ -118,6 +134,7 @@ export class ChartOptionInputService {
               },
             ],
             tooltip: {
+              // tooltip
               valueSuffix: chartData.value2Tooltip,
             },
           },
@@ -134,22 +151,22 @@ export class ChartOptionInputService {
     // 차트 유형: 선 차트
     line: (chartData) => {
       return {
-        // 분석 제목
         title: {
+          // 분석 제목
           text: chartData.titleText,
           align: 'left',
         },
-        // 기존 분석 제목
         subtitle: {
+          // 분석 소제목?
           text: chartData.titleText,
           align: 'left',
         },
         xAxis: {
-          // x축 좌표(변수) / x축 레이블
+          // x축 좌표(변수), x축 레이블 - 배열타입
           categories: chartData.xData,
-          accessibility: {
+          title: {
             // x축 타이틀
-            description: chartData.titleText,
+            text: 'Hello',
           },
         },
         yAxis: [

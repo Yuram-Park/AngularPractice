@@ -24,11 +24,11 @@ export class AnalysisChartComponent {
 
   // UI에서 받은 사용자 option
   userOption: any = {
-    chartType: 'treemap', // 차트유형: column, line, pie, treemap, scatter 가능
+    chartType: 'column', // 차트유형: column, line, pie, treemap, scatter 가능
     field1: '과제수행기관명', // 분석 변수 1
     value1: '연구개발비(백만원)', // 분석 값 1
     value1Analysis: '합계', // 분석 값 1의 분석방법: 개수, 합계, 평균 가능
-    value1Type: 'treemap', // 분석 값 1의 차트 유형: column, line 가능
+    value1Type: 'column', // 분석 값 1의 차트 유형: column, line 가능
     value2: '논문 개수(건)', // 분석 값 2
     value2Analysis: '개수', // 분석 값 2의 분석방법: 개수, 합계, 평균 가능
     value2Type: 'line', // 분석 값 2의 차트 유형: column, line 가능
