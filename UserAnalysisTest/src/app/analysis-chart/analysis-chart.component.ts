@@ -8,6 +8,12 @@ import TreemapModule from 'highcharts/modules/treemap';
 
 TreemapModule(Highcharts);
 
+Highcharts.setOptions({
+  lang: {
+    thousandsSep: ",",
+  }
+})
+
 @Component({
   selector: 'analysis-chart',
   standalone: true,
@@ -24,11 +30,11 @@ export class AnalysisChartComponent {
 
   // UI에서 받은 사용자 option
   userOption: any = {
-    chartType: 'column', // 차트유형: column, line, pie, treemap, scatter 가능
+    chartType: 'bubble', // 차트유형: column, line, pie, treemap, scatter 가능
     field1: '과제수행기관명', // 분석 변수 1
     value1: '연구개발비(백만원)', // 분석 값 1
     value1Analysis: '합계', // 분석 값 1의 분석방법: 개수, 합계, 평균 가능
-    value1Type: 'column', // 분석 값 1의 차트 유형: column, line 가능
+    value1Type: 'bubble', // 분석 값 1의 차트 유형: column, line 가능
     value2: '논문 개수(건)', // 분석 값 2
     value2Analysis: '개수', // 분석 값 2의 분석방법: 개수, 합계, 평균 가능
     value2Type: 'line', // 분석 값 2의 차트 유형: column, line 가능
@@ -72,34 +78,5 @@ export class AnalysisChartComponent {
     this.chartOptions = option;
   }
 
-  setChartOptions(options: inputOptions) {
-    let yAxis2 = {
-      min: 0,
-      title: {
-        text: options.yRight,
-      },
-      opposite: true,
-    };
-    let yAxis2Series = {
-      // y축 #2
-      // 계열명?
-      name: options.yRight,
-      // 차트 유형
-      type: options.yRightType,
-      yAxis: 1,
-      // 값
-      data: [150, 70, 209, 250, 315, 114],
-      // 값 레이블
-      dataLabels: [
-        {
-          align: 'center',
-          enabled: true,
-        },
-      ],
-      // tooltip?(계열명 + x축 좌표(변수) + 값 + valueSuffix)
-      tooltip: {
-        valueSuffix: ' 건',
-      },
-    };
-  }
+
 }

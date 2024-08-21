@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { chart } from 'highcharts';
+import { chart, format } from 'highcharts';
 
 export interface data {
   chartType: string;
@@ -65,7 +65,7 @@ export class ChartOptionInputService {
         },
         subtitle: {
           // 분석 소제목?
-          text: chartData.titleText,
+          text: 'subtitle!!!',
           align: 'center',
         },
         xAxis: {
@@ -110,6 +110,7 @@ export class ChartOptionInputService {
             dataLabels: [
               {
                 align: 'center',
+                // 값 레이블 여부
                 enabled: true,
               },
             ],
@@ -130,6 +131,7 @@ export class ChartOptionInputService {
             dataLabels: [
               {
                 align: 'center',
+                // 값 레이블 여부
                 enabled: true,
               },
             ],
@@ -171,17 +173,16 @@ export class ChartOptionInputService {
         },
         yAxis: [
           {
-            // y축 좌표(변수) / y축 레이블
+            // y축 최소값
             min: 1,
-            // y축 타이틀
             title: {
+              // y축 타이틀
               text: chartData.value1Name,
             },
           },
         ],
         series: [
           {
-            // y축 #1
             // 계열명?
             name: chartData.value1Name,
             // 차트 유형
@@ -189,10 +190,10 @@ export class ChartOptionInputService {
             yAxis: 0,
             // 값
             data: chartData.value1Data,
-            // 값 레이블
             dataLabels: [
               {
                 align: 'center',
+                // 값 레이블 여부
                 enabled: true,
               },
             ],
@@ -212,11 +213,10 @@ export class ChartOptionInputService {
     },
     // 차트 유형: 원형 차트
     pie: (chartData) => {
-
       let dataset: any[] = [];
       for (let i = 0; i < chartData.value1Data.length; i++) {
         dataset.push({
-          // x축 좌표(변수)
+          // x축 좌표(변수), x축 레이블 - 쌍 타입
           name: chartData.xData[i],
           // 값
           y: chartData.value1Data[i],
@@ -224,13 +224,14 @@ export class ChartOptionInputService {
       }
 
       let options = {
-        // 분석 제목
         title: {
+          // 분석 제목
           text: chartData.titleText,
         },
-        // 기존 분석 제목? = x축 타이틀?
         subtitle: {
-          text: chartData.titleText,
+          // 분석 소제목? x축 타이틀???
+          text: 'subtitle??',
+          verticalAlign: 'middle',
         },
         plotOptions: {
           pie: {
@@ -246,12 +247,13 @@ export class ChartOptionInputService {
             type: chartData.value1Type,
             innerSize: '50%',
             // 계열명?
-            name: chartData.value1,
-            // 값 레이블 = x축 레이블
+            name: chartData.value1Name,
             dataLabels: [
               {
+                // 값 레이블 여부
                 enabled: true,
-                format: '{point.name} {point.y} %', // 설정필요//
+                // 값 레이블 포맷
+                format: '{point.name} {point.y} %',
               },
             ],
             data: dataset,
@@ -267,30 +269,31 @@ export class ChartOptionInputService {
     },
     // 차트 유형: 트리맵(타일) 차트
     treemap: (chartData) => {
-
       let dataset: any[] = [];
-      for(let i=0; i<chartData.treemapValue.length; i++){
-        if(chartData.treemapValue[i].parent === null || chartData.treemapValue[i].parent === undefined){
+      for (let i = 0; i < chartData.treemapValue.length; i++) {
+        if (
+          chartData.treemapValue[i].parent === null ||
+          chartData.treemapValue[i].parent === undefined
+        ) {
           dataset.push({
             id: chartData.treemapValue[i].name,
-            // x축 좌표(변수) = x축 레이블?
+            // x축 좌표(변수), x축 레이블?
             name: chartData.treemapValue[i].name,
             // 값
             value: chartData.treemapValue[i].value,
           });
-        } else{
+        } else {
           dataset.push(chartData.treemapValue[i]);
         }
-
       }
 
       let options = {
-        // 분석 제목
         title: {
+          // 분석 제목
           text: chartData.titleText,
         },
-        // 기존 분석 제목?
         subtitle: {
+          // 분석 소제목
           text: chartData.titleText,
         },
         series: [
@@ -300,10 +303,13 @@ export class ChartOptionInputService {
             // 차트 유형
             type: chartData.value1Type,
             layoutAlgorithm: 'squarified',
-            allowTraversingTree: true,
+            allowTraversingTree: true, // drilldown여부
             animationLimit: 1000,
             dataLabels: {
+              // 값 레이블 여부
               enabled: true,
+              // 값 레이블 포맷? 값? x축?
+              format: '▶{point.name}',
             },
             levels: [
               {
@@ -328,5 +334,56 @@ export class ChartOptionInputService {
 
       return options;
     },
+    // 차트 유형: 버블(스캐터 플롯) 차트
+    bubble: (chartData) => {
+      return {
+        title: {
+          // 분석 제목
+          text: chartData.titleText,
+        },
+        subtitle: {
+          // 분석 소제목
+          text: chartData.titleText,
+        },
+        xAxis: {
+          title: {
+            // x축 타이틀
+            text: 'x축 타이틀',
+          },
+        },
+        yAxis: {
+          title: {
+            // y축 타이틀
+            text: 'y축 타이틀',
+          },
+        },
+        series: [
+          {
+            type: 'bubble',
+            plotBorderWidth: 1,
+            zooming: {
+              type: 'xy',
+            },
+            data: [
+              { x: 95, y: 95, z: 13.8, name: 'BE', country: 'Belgium' },
+              { x: 95, y: 90, z: 13.8, name: 'BE', country: 'Belgium' },
+              { x: 95, y: 95, z: 14.8, name: 'BE', country: 'Belgium' },
+              { x: 95, y: 95, z: 19.8, name: 'BE', country: 'Belgium' },
+            ],
+          },
+        ],
+        legend: {
+          enabled: false,
+        },
+        plotOptions: {
+          series: {
+            dataLabels: {
+              enabled: true,
+              format: '{point.name}',
+            },
+          },
+        },
+      };
+    }
   };
 }
