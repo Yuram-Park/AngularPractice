@@ -5,14 +5,52 @@ import { FormsModule } from '@angular/forms';
 import { AnalysisOptionComponent, inputOptions } from '../analysis-option/analysis-option.component';
 import { ChartOptionInputService } from '../analysis-chart/chart-option-input.service';
 import TreemapModule from 'highcharts/modules/treemap';
+import HC_exporting from 'highcharts/highcharts-more';
+
 
 TreemapModule(Highcharts);
+HC_exporting(Highcharts);
 
 Highcharts.setOptions({
   lang: {
     thousandsSep: ",",
   }
 })
+
+// UI에서 받은 사용자 option
+export interface userOption {
+  // 차트 유형
+  chartType: string; // CL1(막대or선), CL2(막대&선), pie, treemap, scatter 가능
+  xFieldName: string; // 분석 집계 변수 1
+  xFieldNameCode: string; // BE 데이터를 받아오기 위한 코드
+
+  // 막대/선차트, 원형차트, 트리맵 차트
+  yValue1Name: string | null | undefined; // 분석값 1
+  yValue1NameCode: string | null | undefined; // BE 데이터를 받아오기 위한 코드
+  yValue1Analysis: string | null | undefined; // 값 계산: 개수(count), 합계(sum), 평균(avg)
+  yValue1Type: string | null | undefined; // 값 표현: 막대(column), 선(line)
+
+  yValue2Name: string | null | undefined; // 분석값 2
+  yValue2NameCode: string | null | undefined; // BE 데이터를 받아오기 위한 코드
+  yValue2Analysis: string | null | undefined; // 값 계산
+  yValue2Type: string | null | undefined; // 값 표현
+
+  // 버블 차트
+  yFieldName: string | null | undefined; // 분석 집계 변수 2
+  yFieldNameCode: string | null | undefined; // BE 데이터를 받아오기 위한 코드
+  zValueName: string | null | undefined; // z 값
+  zValueNameCode: string | null | undefined; // BE 데이터를 받아오기 위한 코드
+  zValueAnalysis: string | null | undefined; // z 값 계산
+}
+
+export interface respData {
+  xFieldData: any[] | null | undefined;
+  yValue1Data: any[] | null | undefined;
+  yValue2Data: any[] | null | undefined;
+  pieData: any[] | null | undefined;
+  treemapData: any[] | null | undefined;
+  bubbleData: any[] | null | undefined;
+}
 
 @Component({
   selector: 'analysis-chart',
@@ -29,37 +67,89 @@ export class AnalysisChartComponent {
   constructor(private chartOptionInput: ChartOptionInputService) {}
 
   // UI에서 받은 사용자 option
-  userOption: any = {
-    chartType: 'bubble', // 차트유형: column, line, pie, treemap, scatter 가능
-    field1: '과제수행기관명', // 분석 변수 1
-    value1: '연구개발비(백만원)', // 분석 값 1
-    value1Analysis: '합계', // 분석 값 1의 분석방법: 개수, 합계, 평균 가능
-    value1Type: 'bubble', // 분석 값 1의 차트 유형: column, line 가능
-    value2: '논문 개수(건)', // 분석 값 2
-    value2Analysis: '개수', // 분석 값 2의 분석방법: 개수, 합계, 평균 가능
-    value2Type: 'line', // 분석 값 2의 차트 유형: column, line 가능
+  userOption: userOption = {
+    // 차트 유형
+    chartType: 'CL1', // CL1(막대or선), CL2(막대&선), pie, treemap, scatter 가능
+    xFieldName: '과제수행기관명', // 분석 집계 변수 1 // BE로 보내기 위한 코드도 따로 필요?
+    xFieldNameCode: 'bns_name',
+
+    // 막대/선차트, 원형차트, 트리맵 차트
+    yValue1Name: '과제 현황(건)', // 분석값 1
+    yValue1NameCode: 'tasknm',
+    yValue1Analysis: 'count', // 값 계산: 개수(count), 합계(sum), 평균(avg)
+    yValue1Type: 'column', // 값 표현: 막대(column), 선(line)
+
+    yValue2Name: '논문 성과(건)', // 분석값 2
+    yValue2NameCode: 'journal',
+    yValue2Analysis: 'count', // 값 계산
+    yValue2Type: 'line', // 값 표현
+
+    // 버블 차트
+    yFieldName: '기술분류', // 분석 집계 변수 2
+    yFieldNameCode: 'tech_sort',
+    zValueName: '연구개발비(백만원)', // z 값
+    zValueNameCode: '_amount',
+    zValueAnalysis: 'sum', // z 값 계산
   };
 
+  // BE 데이터 전송 메서드 return: respData
+  setData(userOption: userOption) {
+    // chartType에 따라 nameCode와 analysis(계산 방식)를 이용해서 데이터를 받아오고 respData에 저장
+
+  }
+
+  // tooltip 반영
+  setTooptip(valueName: string) {
+    let price = '정부투자연구비, 매출액, 기술료';
+    let count = '과제, 논문성과, 특허성과, 기술료성과, 사업화성과, 연수';
+    let people = '학위자';
+    if (price.includes(valueName)) {
+      return '백만원';
+    } else if (count.includes(valueName)) {
+      return '건';
+    } else if (people.includes(valueName)) {
+      return '명';
+    } else {
+      return '';
+    }
+  }
+
   // BE에서 받은 값 = 데이터
-  // treemap처럼 set으로 받는게 나으려나..??
-  respData: any = {
-    field1Data: [
+  respData: respData = {
+    // 막대/선차트
+    xFieldData: [
       '한국과학기술원',
       '한국전자통신연구원',
       '서울대학교',
       '부산대학',
       '한국과학기술연구원',
+    ], // 분석 집계 변수 데이터
+    yValue1Data: [15446, 18721, 30678, 62310, 114274], // 분석값1 데이터
+    yValue2Data: [164, 158, 143, 97, 65], // 분석값2 데이터
+
+    // 원형 차트
+    pieData: [
+      {
+        // x축 좌표(변수), x축 레이블 - 쌍 타입
+        name: '한국과학기술원',
+        // y축 좌표(변수), 값
+        y: 164,
+      },
+      { name: '한국전자통신연구원', y: 158 },
+      { name: '서울대학교', y: 143 },
+      { name: '부산대학', y: 97 },
+      { name: '한국과학기술연구원', y: 95 },
     ],
-    value1Data: [15446, 18721, 30678, 62310, 114274],
-    value2Data: [164, 158, 143, 97, 65],
 
-    // pie chart
-    // dataformat
-
-    // treemap
-    // data -> parent 추가해야함
-    treemapValue: [
-      { name: '물리학', value: 198725, parent: null },
+    // 트리맵 차트
+    treemapData: [
+      {
+        // x축 좌표(변수), x축 레이블?
+        name: '물리학',
+        // y축 좌표(변수), 값
+        value: 198725,
+        parent: null,
+      },
       { name: '정보/통신', value: 56233, parent: null },
       { name: '수학', value: 31186, parent: null },
       { name: '원자/분자물리', value: 113637, parent: '물리학' },
@@ -69,6 +159,23 @@ export class AnalysisChartComponent {
       { name: '기타정보/통신', value: 3022, parent: '정보/통신' },
       { name: '정보보호', value: 401, parent: '정보/통신' },
     ],
+
+    // 버블 차트
+    bubbleData: [
+      {
+        // x축 좌표(변수)
+        x: 97,
+        // y축 좌표(변수)
+        y: 70,
+        // z축 좌표(변수), 값
+        z: 50,
+        // z축 좌표(변수)?? z축 레이블??
+        name: 'BE',
+      },
+      { x: 30, y: 100, z: 70, name: 'BE' },
+      { x: 55, y: 50, z: 30, name: 'BE' },
+      { x: 105, y: 63, z: 80, name: 'BE' },
+    ],
   };
 
   ngOnInit() {
@@ -77,6 +184,4 @@ export class AnalysisChartComponent {
     ](this.chartOptionInput.processData(this.userOption, this.respData));
     this.chartOptions = option;
   }
-
-
 }
