@@ -47,6 +47,7 @@ export class AnalysisOptionComponent {
   yRightType: string = '';
   chartOptions: Highcharts.Options = {};
 
+
   setChartOption() {
     let options:inputOptions = {
       chartType : this.chartType,
@@ -61,6 +62,7 @@ export class AnalysisOptionComponent {
       yRightType: this.yRightType
     };
     this.goChart.emit(options);
+    console.log(this.yLeft === '');
   }
 
 

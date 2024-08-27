@@ -56,18 +56,18 @@ export class ChartOptionInputService {
   // chartOption형식으로 input형태 만들어주기
   // chart type에 따라 분류해보기
   setOption: { [chartType: string]: (chartData: any) => Object } = {
-    // 차트 유형: 막대 or 선 차트
-    CL1: (chartData) => {
+    // 차트유형: 막대/선 차트
+    CL: (chartData) => {
       return {
         title: {
           // 분석 제목
           text: chartData.xFieldName,
-          align: 'left',
+          align: 'center',
         },
         subtitle: {
           // 분석 소제목?
           text: chartData.xFieldName,
-          align: 'left',
+          align: 'center',
         },
         xAxis: {
           // x축 좌표(변수), x축 레이블 - 배열타입
@@ -77,38 +77,80 @@ export class ChartOptionInputService {
             text: chartData.xFieldName,
           },
         },
-        yAxis: [
-          {
-            // y축 최소값
-            min: 1,
-            title: {
-              // y축 타이틀
-              text: chartData.yValue1Name,
-            },
-          },
-        ],
-        series: [
-          {
-            // 계열명?
-            name: chartData.yValue1Name,
-            // 차트 유형
-            type: chartData.yValue1Type,
-            yAxis: 0,
-            // y축 좌표(변수), 값
-            data: chartData.yValue1Data,
-            dataLabels: [
-              {
-                align: 'center',
-                // 값 레이블 여부
-                enabled: true,
+        yAxis: (function () {
+          let option: Highcharts.YAxisOptions[] = [
+            {
+              // y축 최소값
+              min: 1,
+              title: {
+                // y축 타이틀
+                text: chartData.yValue1Name,
               },
-            ],
-            // tooltip?(계열명 + x축 좌표(변수) + 값 + valueSuffix)
-            tooltip: {
-              valueSuffix: '넣어야해!!!',
             },
-          },
-        ],
+          ];
+          if (chartData.yValue2Name && chartData.yValue1Name !== '') {
+            option.push({
+              // y축 #2
+              // y축 최솟값?
+              min: 1,
+              title: {
+                // y축 타이틀 #2
+                text: chartData.yValue2Name,
+              },
+              opposite: true, // y축 위치
+            });
+          }
+          return option;
+        })(),
+        series: (function () {
+          let option: Highcharts.SeriesOptionsType[] = [
+            {
+              // y축 #1
+              // y축 계열명
+              name: chartData.yValue1Name,
+              // 차트 유형
+              type: chartData.yValue1Type,
+              yAxis: 0, // 위 yAxis의 첫번째 값
+              // y축 좌표(변수), 값 #1
+              data: chartData.yValue1Data,
+              dataLabels: [
+                {
+                  align: 'center',
+                  // 값 레이블 여부
+                  enabled: true,
+                },
+              ],
+              tooltip: {
+                // tooltip
+                valueSuffix: '넣어야해!!!',
+              },
+            },
+          ];
+          if (chartData.yValue2Name && chartData.yValue1Name !== '') {
+            option.push({
+              // y축 #2
+              // y축 계열명
+              name: chartData.yValue2Name,
+              // 차트 유형
+              type: chartData.yValue2Type,
+              yAxis: 1, // 위 yAxis의 첫번째 값
+              // y축 좌표(변수), 값 #2
+              data: chartData.yValue2Data,
+              dataLabels: [
+                {
+                  align: 'center',
+                  // 값 레이블 여부
+                  enabled: true,
+                },
+              ],
+              tooltip: {
+                // tooltip
+                valueSuffix: '넣어야해!!!',
+              },
+            });
+          }
+          return option;
+        })(),
         plotOptions: {
           column: {
             pointPadding: 0.2,
@@ -117,101 +159,106 @@ export class ChartOptionInputService {
         },
       };
     },
-    // 차트유형: 수직 막대 차트
-    CL2: (chartData) => {
-      return {
-        title: {
-          // 분석 제목
-          text: chartData.xFieldName,
-          align: 'center',
-        },
-        subtitle: {
-          // 분석 소제목?
-          text: chartData.xFieldName,
-          align: 'center',
-        },
-        xAxis: {
-          // x축 좌표(변수), x축 레이블 - 배열타입
-          categories: chartData.xFieldData,
-          title: {
-            // x축 타이틀
-            text: chartData.xFieldName,
-          },
-        },
-        yAxis: [
-          {
-            // y축 #1
-            // y축 최솟값?
-            //min: 1,
-            title: {
-              // y축 타이틀 #1
-              text: chartData.yValue1Name,
-            },
-          },
-          {
-            // y축 #2
-            // y축 최솟값?
-            //min: 1,
-            title: {
-              // y축 타이틀 #2
-              text: chartData.yValue2Name,
-            },
-            opposite: true, // y축 위치
-          },
-        ],
-        series: [
-          {
-            // y축 #1
-            // y축 계열명
-            name: chartData.yValue1Name,
-            // 차트 유형
-            type: chartData.yValue1Type,
-            yAxis: 0, // 위 yAxis의 첫번째 값
-            // y축 좌표(변수), 값 #1
-            data: chartData.yValue1Data,
-            dataLabels: [
-              {
-                align: 'center',
-                // 값 레이블 여부
-                enabled: true,
-              },
-            ],
-            tooltip: {
-              // tooltip
-              valueSuffix: '넣어야해!!!',
-            },
-          },
-          {
-            // y축 #2
-            // y축 계열명
-            name: chartData.yValue2Name,
-            // 차트 유형
-            type: chartData.yValue2Type,
-            yAxis: 1, // 위 yAxis의 첫번째 값
-            // y축 좌표(변수), 값 #2
-            data: chartData.yValue2Data,
-            dataLabels: [
-              {
-                align: 'center',
-                // 값 레이블 여부
-                enabled: true,
-              },
-            ],
-            tooltip: {
-              // tooltip
-              valueSuffix: '넣어야해!!!',
-            },
-          },
-        ],
+    // function 아닌, 배열 사용 방법
+    // CL: (chartData) => {
+    //   let yAxis: any[] = [
+    //     {
+    //       // y축 최소값
+    //       min: 1,
+    //       title: {
+    //         // y축 타이틀
+    //         text: chartData.yValue1Name,
+    //       },
+    //     },
+    //   ];
 
-        plotOptions: {
-          column: {
-            pointPadding: 0.2,
-            borderWidth: 0,
-          },
-        },
-      };
-    },
+    //   let data: any[] = [
+    //     {
+    //       // y축 #1
+    //       // y축 계열명
+    //       name: chartData.yValue1Name,
+    //       // 차트 유형
+    //       type: chartData.yValue1Type,
+    //       yAxis: 0, // 위 yAxis의 첫번째 값
+    //       // y축 좌표(변수), 값 #1
+    //       data: chartData.yValue1Data,
+    //       dataLabels: [
+    //         {
+    //           align: 'center',
+    //           // 값 레이블 여부
+    //           enabled: true,
+    //         },
+    //       ],
+    //       tooltip: {
+    //         // tooltip
+    //         valueSuffix: '넣어야해!!!',
+    //       },
+    //     },
+    //   ];
+
+    //   if (chartData.yValue2Name !== '') {
+    //     yAxis.push({
+    //       // y축 #2
+    //       // y축 최솟값?
+    //       min: 1,
+    //       title: {
+    //         // y축 타이틀 #2
+    //         text: chartData.yValue2Name,
+    //       },
+    //       opposite: true, // y축 위치
+    //     });
+    //     data.push({
+    //       // y축 #2
+    //       // y축 계열명
+    //       name: chartData.yValue2Name,
+    //       // 차트 유형
+    //       type: chartData.yValue2Type,
+    //       yAxis: 1, // 위 yAxis의 첫번째 값
+    //       // y축 좌표(변수), 값 #2
+    //       data: chartData.yValue2Data,
+    //       dataLabels: [
+    //         {
+    //           align: 'center',
+    //           // 값 레이블 여부
+    //           enabled: true,
+    //         },
+    //       ],
+    //       tooltip: {
+    //         // tooltip
+    //         valueSuffix: '넣어야해!!!',
+    //       },
+    //     });
+    //   }
+
+    //   return {
+    //     title: {
+    //       // 분석 제목
+    //       text: chartData.xFieldName,
+    //       align: 'center',
+    //     },
+    //     subtitle: {
+    //       // 분석 소제목?
+    //       text: chartData.xFieldName,
+    //       align: 'center',
+    //     },
+    //     xAxis: {
+    //       // x축 좌표(변수), x축 레이블 - 배열타입
+    //       categories: chartData.xFieldData,
+    //       title: {
+    //         // x축 타이틀
+    //         text: chartData.xFieldName,
+    //       },
+    //     },
+    //     yAxis: yAxis,
+    //     series: data,
+    //     plotOptions: {
+    //       column: {
+    //         pointPadding: 0.2,
+    //         borderWidth: 0,
+    //       },
+    //     },
+    //   };
+    // },
     // 차트 유형: 원형 차트
     pie: (chartData) => {
       let dataset: any[] = [];

@@ -69,40 +69,39 @@ export class AnalysisChartComponent {
   // UI에서 받은 사용자 option
   userOption: userOption = {
     // 차트 유형
-    chartType: 'CL1', // CL1(막대or선), CL2(막대&선), pie, treemap, scatter 가능
-    xFieldName: '과제수행기관명', // 분석 집계 변수 1 // BE로 보내기 위한 코드도 따로 필요?
-    xFieldNameCode: 'bns_name',
+    chartType: 'CL', // CL(막대/선), pie, treemap, bubble 가능
+    xFieldName: '과제수행기관명', // 분석 집계 변수 1
+    xFieldNameCode: 'bns_name', // BE로 보내기 위한 코드
 
     // 막대/선차트, 원형차트, 트리맵 차트
     yValue1Name: '과제 현황(건)', // 분석값 1
-    yValue1NameCode: 'tasknm',
+    yValue1NameCode: 'tasknm', // BE로 보내기 위한 코드
     yValue1Analysis: 'count', // 값 계산: 개수(count), 합계(sum), 평균(avg)
     yValue1Type: 'column', // 값 표현: 막대(column), 선(line)
 
-    yValue2Name: '논문 성과(건)', // 분석값 2
-    yValue2NameCode: 'journal',
-    yValue2Analysis: 'count', // 값 계산
+    yValue2Name: '', // 분석값 2
+    yValue2NameCode: 'journal', // BE로 보내기 위한 코드
+    yValue2Analysis: 'count', // 값 계산: 개수(count), 합계(sum), 평균(avg)
     yValue2Type: 'line', // 값 표현
 
     // 버블 차트
     yFieldName: '기술분류', // 분석 집계 변수 2
-    yFieldNameCode: 'tech_sort',
+    yFieldNameCode: 'tech_sort', // BE로 보내기 위한 코드
     zValueName: '연구개발비(백만원)', // z 값
-    zValueNameCode: '_amount',
+    zValueNameCode: '_amount', // BE로 보내기 위한 코드
     zValueAnalysis: 'sum', // z 값 계산
   };
 
   // BE 데이터 전송 메서드 return: respData
   setData(userOption: userOption) {
     // chartType에 따라 nameCode와 analysis(계산 방식)를 이용해서 데이터를 받아오고 respData에 저장
-
   }
 
   // tooltip 반영
   setTooptip(valueName: string) {
-    let price = '정부투자연구비, 매출액, 기술료';
-    let count = '과제, 논문성과, 특허성과, 기술료성과, 사업화성과, 연수';
-    let people = '학위자';
+    let price = '정부투자연구비(백만원), 당해년도 매출액(백만원), 당해년도 기술료(백만원)';
+    let count = '과제(건), 논문성과(건), 특허성과(건), 기술료성과(건), 사업화성과(건), 연수(건)';
+    let people = '학위자(명)';
     if (price.includes(valueName)) {
       return '백만원';
     } else if (count.includes(valueName)) {
@@ -125,7 +124,7 @@ export class AnalysisChartComponent {
       '한국과학기술연구원',
     ], // 분석 집계 변수 데이터
     yValue1Data: [15446, 18721, 30678, 62310, 114274], // 분석값1 데이터
-    yValue2Data: [164, 158, 143, 97, 65], // 분석값2 데이터
+    yValue2Data: [155, 250, 169, 300, 352], // 분석값2 데이터
 
     // 원형 차트
     pieData: [
@@ -170,18 +169,16 @@ export class AnalysisChartComponent {
         // z축 좌표(변수), 값
         z: 50,
         // z축 좌표(변수)?? z축 레이블??
-        name: 'BE',
+        name: 'A',
       },
-      { x: 30, y: 100, z: 70, name: 'BE' },
-      { x: 55, y: 50, z: 30, name: 'BE' },
-      { x: 105, y: 63, z: 80, name: 'BE' },
+      { x: 30, y: 100, z: 70, name: 'B' },
+      { x: 55, y: 50, z: 30, name: 'C' },
+      { x: 105, y: 63, z: 80, name: 'D' },
     ],
   };
 
   ngOnInit() {
-    let option: any = this.chartOptionInput.setOption[
-      this.userOption.chartType
-    ](this.chartOptionInput.processData(this.userOption, this.respData));
+    let option: any = this.chartOptionInput.setOption[this.userOption.chartType](this.chartOptionInput.processData(this.userOption, this.respData));
     this.chartOptions = option;
   }
 }
