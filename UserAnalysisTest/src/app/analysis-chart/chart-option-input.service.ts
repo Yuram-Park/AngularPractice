@@ -6,6 +6,7 @@ export interface data {
   xFieldName: string;
   xFieldData: any[] | null | undefined;
   yFieldName: string | null | undefined; // 버블차트 - 분석 집계 변수 2
+  yFieldData: any[] | null | undefined;
   yValue1Name: string;
   yValue1Analysis: string;
   yValue1Type: string;
@@ -35,6 +36,7 @@ export class ChartOptionInputService {
       xFieldName: userOption.xFieldName,
       xFieldData: respData.xFieldData,
       yFieldName: userOption.yFieldName,
+      yFieldData: respData.yFieldData,
       yValue1Name: userOption.yValue1Name,
       yValue1Analysis: userOption.yValue1Analysis,
       yValue1Type: userOption.yValue1Type,
@@ -260,7 +262,7 @@ export class ChartOptionInputService {
     //   };
     // },
     // 차트 유형: 원형 차트
-    pie: (chartData) => {
+    P: (chartData) => {
       let dataset: any[] = [];
       for (let i = 0; i < chartData.pieData.length; i++) {
         dataset.push(chartData.pieData[i]);
@@ -310,7 +312,7 @@ export class ChartOptionInputService {
       return options;
     },
     // 차트 유형: 트리맵(타일) 차트
-    treemap: (chartData) => {
+    T: (chartData) => {
       let dataset: any[] = [];
       for (let i = 0; i < chartData.treemapData.length; i++) {
         if (
@@ -376,8 +378,84 @@ export class ChartOptionInputService {
 
       return options;
     },
+    // 차트 유형: 매트릭스 차트
+    M: (chartData) => {
+      return {
+        title: {
+          // 분석 제목
+          text: chartData.xFieldName,
+        },
+        subtitle: {
+          // 분석 소제목
+          text: chartData.xFieldName,
+        },
+        xAxis: {
+          title: {
+            // x축 타이틀
+            text: chartData.xFieldName,
+          },
+          categories: chartData.xFieldData,
+          labels: {
+            formatter: function (this: any) {
+              return typeof this.value === 'string' ? this.value : null;
+            },
+          },
+        },
+        yAxis: {
+          title: {
+            // y축 타이틀
+            text: chartData.yFieldName,
+          },
+          categories: chartData.yFieldData,
+          type: 'category',
+          labels: {
+            formatter: function (this: any) {
+              return typeof this.value === 'string' ? this.value : null;
+            },
+          },
+        },
+        series: [
+          {
+            name: chartData.yValue1Name,
+            borderWidth: 1,
+            type: 'bubble',
+            data: [
+              [0, 0, 10],
+              [0, 1, 19],
+              [0, 2, 8],
+              [0, 3, 24],
+              [0, 4, 67],
+              [1, 0, 92],
+              [1, 1, 58],
+              [1, 2, 78],
+              [1, 3, 117],
+              [1, 4, 48],
+              [2, 0, 35],
+              [2, 1, 15],
+              [2, 2, 123],
+              [2, 3, 64],
+              [2, 4, 52],
+              [3, 0, 72],
+              [3, 1, 132],
+              [3, 2, 114],
+              [3, 3, 19],
+              [3, 4, 16],
+              [4, 0, 38],
+              [4, 1, 5],
+              [4, 2, 8],
+              [4, 3, 117],
+              [4, 4, 115],
+            ],
+            dataLabels: {
+              enabled: true,
+              color: '#000000',
+            },
+          },
+        ],
+      };
+    },
     // 차트 유형: 버블(스캐터 플롯) 차트
-    bubble: (chartData) => {
+    B: (chartData) => {
       let dataset: any[] = [];
       for (let i = 0; i < chartData.bubbleData.length; i++) {
         dataset.push(chartData.bubbleData[i]);
@@ -397,6 +475,7 @@ export class ChartOptionInputService {
             // x축 타이틀
             text: chartData.xFieldName,
           },
+          categories: chartData.xFieldData,
         },
         yAxis: {
           title: {
@@ -411,9 +490,9 @@ export class ChartOptionInputService {
             // 계열명
             name: 'hi',
             plotBorderWidth: 1,
-            zooming: {
-              type: 'xy',
-            },
+            // zooming: {
+            //   type: 'xy',
+            // },
             data: dataset,
           },
         ],

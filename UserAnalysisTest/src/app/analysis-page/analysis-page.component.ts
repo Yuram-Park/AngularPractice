@@ -1,18 +1,6 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-
-export interface inputOptions {
-    chartType: string,
-    xValue: string,
-    xValueTop: number,
-    yValue: string,
-    yLeft: string,
-    yLeftValue: string,
-    yLeftType: string,
-    yRight: string,
-    yRightValue: string,
-    yRightType: string,
-  };
+import { Component } from '@angular/core';
+import { AnalysisChartComponent } from '../analysis-chart/analysis-chart.component';
+import { AnalysisOptionComponent } from '../analysis-option/analysis-option.component';
 
   // UI에서 받은 사용자 option
 export interface userOption {
@@ -41,27 +29,18 @@ export interface userOption {
 }
 
 @Component({
-  selector: 'analysis-option',
+  selector: 'analysis-page',
   standalone: true,
-  imports: [FormsModule],
-  templateUrl: './analysis-option.component.html',
-  styleUrl: './analysis-option.component.css',
+  imports: [AnalysisOptionComponent, AnalysisChartComponent],
+  templateUrl: './analysis-page.component.html',
+  styleUrl: './analysis-page.component.css',
 })
-export class AnalysisOptionComponent {
-  // constructor(private chartOptionInput: ChartOptionInputService){}
-  // chartData: any = {};
-
-  // ngOnInit(){
-  //   let option: any = this.chartOptionInput.setOption['column'](this.chartData);
-  //   console.log(option);
-  // }
-
-  @Output() goChart = new EventEmitter<inputOptions>();
+export class AnalysisPageComponent {
 
   // UI에서 받은 사용자 option
   userOption: userOption = {
     // 차트 유형
-    chartType: 'CL', // CL(막대/선), pie, treemap, bubble 가능
+    chartType: 'CL', // CL(막대/선), P(파이), T(트리맵), M(매트릭스), B(버블) 가능
     xFieldName: '과제수행기관명', // 분석 집계 변수 1
     xFieldNameCode: 'bns_name', // BE로 보내기 위한 코드
 
@@ -71,10 +50,10 @@ export class AnalysisOptionComponent {
     yValue1Analysis: 'count', // 값 계산: 개수(count), 합계(sum), 평균(avg)
     yValue1Type: 'column', // 값 표현: 막대(column), 선(line)
 
-    yValue2Name: '', // 분석값 2
+    yValue2Name: '논문 성과(건)', // 분석값 2
     yValue2NameCode: 'journal', // BE로 보내기 위한 코드
     yValue2Analysis: 'count', // 값 계산: 개수(count), 합계(sum), 평균(avg)
-    yValue2Type: 'line', // 값 표현
+    yValue2Type: 'column', // 값 표현
 
     // 버블 차트
     yFieldName: '기술분류', // 분석 집계 변수 2
